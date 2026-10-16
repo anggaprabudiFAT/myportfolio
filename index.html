@@ -1,10 +1,9 @@
 <!DOCTYPE html>
-<!-- saved from url=(0053)https://angga-prabudi-portfolio.tiiny.site/index.html -->
 <html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title data-id="th-modified">Angga Prabudi — Professional Portfolio</title>
-<script src="https://jsdelivr.net"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   :root {
@@ -119,20 +118,8 @@
     .chart-card.full { grid-column:1; }
   }
 </style>
-<meta property="og:title" content="Angga Prabudi — Professional Portfolio" data-id="th-modified"><meta property="og:image" content="https://tiiny.host/assets/logo-purple-bg.png" data-id="th-modified"><meta property="og:image:width" content="1501" data-id="th-modified"><meta property="og:image:height" content="1501" data-id="th-modified"><meta property="og:image:type" content="image/png" data-id="th-modified"><meta property="og:url" content="https://angga-prabudi-portfolio.tiiny.site/" data-id="th-modified"><meta property="og:type" content="website" data-id="th-modified"><script type="text/javascript" src="./Angga Prabudi — Professional Portfolio_files/ad-script.js.download"></script><script defer="" data-domain="angga-prabudi-portfolio.tiiny.site" src="./Angga Prabudi — Professional Portfolio_files/plausible.js.download"></script></head>
-<body><div style="position: fixed !important; bottom: 0% !important; left: 0% !important; right: 0% !important; width: 100% !important; height: 55px !important; z-index: 9999 !important;"><a href="https://tiiny.host/fl?ref=free-site">
-    <div style="padding: 10px !important; height: 55px; text-align: center; background: rgb(220,137,232) !important; background: linear-gradient(141deg, rgba(220,137,232,1) 0%, rgba(144,64,204,1) 100%) !important;">
-      <img style="height: 35px !important; width: auto !important;" src="./Angga Prabudi — Professional Portfolio_files/ad.png" alt="tiiny.host">
-    </div>
-  </a></div><div style="position: fixed !important; bottom: 0% !important; left: 0% !important; right: 0% !important; width: 100% !important; height: 55px !important; z-index: 9999 !important;"><a href="https://tiiny.host/fl?ref=free-site">
-    <div style="padding: 10px !important; height: 55px; text-align: center; background: rgb(220,137,232) !important; background: linear-gradient(141deg, rgba(220,137,232,1) 0%, rgba(144,64,204,1) 100%) !important;">
-      <img style="height: 35px !important; width: auto !important;" src="./Angga Prabudi — Professional Portfolio_files/ad.png" alt="tiiny.host">
-    </div>
-  </a></div><div style="position: fixed !important; bottom: 0% !important; left: 0% !important; right: 0% !important; width: 100% !important; height: 55px !important; z-index: 9999 !important;"><a href="https://tiiny.host/fl?ref=free-site">
-    <div style="padding: 10px !important; height: 55px; text-align: center; background: rgb(220,137,232) !important; background: linear-gradient(141deg, rgba(220,137,232,1) 0%, rgba(144,64,204,1) 100%) !important;">
-      <img style="height: 35px !important; width: auto !important;" src="./Angga Prabudi — Professional Portfolio_files/ad.png" alt="tiiny.host">
-    </div>
-  </a></div>
+<meta property="og:title" content="Angga Prabudi — Professional Portfolio" data-id="th-modified"><meta property="og:type" content="website" data-id="th-modified"></head>
+<body>
 
 <!-- HERO -->
 <div class="hero">
@@ -677,7 +664,7 @@
     </div>
     <div class="tl-item">
       <div class="tl-dot"></div>
-      <div class="tl-head"><div class="tl-title ablefocused"><a href="https://crimson-herminia-96.tiiny.site/" class=" ">Budget &amp; Cost Control Supervisor<br>Link: Cost Accounting and Budget Analysis in Coal and Mineral<br></a></div><div class="tl-period">Feb–Nov 2023</div></div>
+      <div class="tl-head"><div class="tl-title ablefocused"><a href="nikel.html" class=" ">Budget &amp; Cost Control Supervisor<br>Link: Cost Accounting and Budget Analysis in Coal and Mineral<br></a></div><div class="tl-period">Feb–Nov 2023</div></div>
       <div class="tl-company">PT Tribhakti Inspektama, North Jakarta</div>
       <div style="display:inline-flex; gap:8px; margin-bottom:6px; flex-wrap:wrap;">
         <span style="background:var(--teal-light); color:var(--teal); font-size:10px; font-weight:700; padding:2px 8px; border-radius:4px; letter-spacing:0.5px;" class="">🔍 Jasa Inspeksi &amp; Pengujian</span>
@@ -978,74 +965,3 @@ new Chart(document.getElementById('chartOpex'), {
 
 
 <div style="height: 55px !important;"></div><div style="height: 55px !important;"></div><div style="height: 55px !important;"></div></body></html>
-<!-- ========================================== -->
-<!-- KODE SCRIPT CHART DINAMIS — ANGGA PRABUDI  -->
-<!-- ========================================== -->
-<script>
-  // KELOMPOK DATA UTAMA (JAKARTA BRANCH JAN-JUN 2023)
-  const months = ['Jan-23', 'Feb-23', 'Mar-23', 'Apr-23', 'May-23', 'Jun-23'];
-
-  // 1. Chart: Monthly Revenue — Actual vs Budget
-  const ctxRevenue = document.getElementById('revenueChart') || document.createElement('canvas');
-  if(document.getElementById('revenueChart')) {
-    new Chart(ctxRevenue, {
-      type: 'bar',
-      data: {
-        labels: months,
-        datasets: [
-          { label: 'Actual Revenue', data:, backgroundColor: '#1F6FEB' },
-          { label: 'Budget Revenue', data:, backgroundColor: 'rgba(0,0,0,0.15)' }
-        ]
-      },
-      options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true } } }
-    });
-  }
-
-  // 2. Chart: Gross Profit & EBITDA Monthly
-  const ctxProfit = document.getElementById('profitChart') || document.createElement('canvas');
-  if(document.getElementById('profitChart')) {
-    new Chart(ctxProfit, {
-      type: 'line',
-      data: {
-        labels: months,
-        datasets: [
-          { label: 'Gross Profit', data:, borderColor: '#0F6E56', tension: 0.2, fill: false },
-          { label: 'EBITDA', data:, borderColor: '#BA7517', tension: 0.2, fill: false }
-        ]
-      },
-      options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true } } }
-    });
-  }
-
-  // 3. Chart: P&L Summary — Budget vs Actual
-  const ctxPL = document.getElementById('plChart') || document.createElement('canvas');
-  if(document.getElementById('plChart')) {
-    new Chart(ctxPL, {
-      type: 'bar',
-      data: {
-        labels: ['Total Revenue', 'Gross Profit', 'EBITDA'],
-        datasets: [
-          { label: 'Actual H1', data:, backgroundColor: '#0F6E56' },
-          { label: 'Budget H1', data:, backgroundColor: '#0D1B2A' }
-        ]
-      },
-      options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true } } }
-    });
-  }
-
-  // 4. Chart: Monthly OPEX vs Gross Profit
-  const ctxOpex = document.getElementById('opexChart') || document.createElement('canvas');
-  if(document.getElementById('opexChart')) {
-    new Chart(ctxOpex, {
-      type: 'bar',
-      data: {
-        labels: months,
-        datasets: [
-          { label: 'Monthly OPEX', data:, backgroundColor: '#C0392B', stack: 'Stack 0' },
-          { label: 'Gross Profit', data:, backgroundColor: '#0F6E56', stack: 'Stack 1' }
-        ]
-      },
-      options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true } } }
-    });
-  }
-</script>

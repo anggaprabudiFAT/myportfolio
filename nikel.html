@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>Portfolio Analisis — Cost Accounting & Fleet Management Tambang Nikel</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+<style>
+  :root{
+    --ink:#1c1c1a; --sub:#5b5a54; --line:#e2e0d8; --bg:#fbfaf6; --card:#ffffff;
+    --accent:#0c447c; --accent-l:#e6f1fb; --accent-d:#042c53;
+    --warn:#993c1d; --warn-l:#faece7;
+    --ok:#0f6e56; --ok-l:#e1f5ee;
+    --amber:#854f0b; --amber-l:#faeeda;
+  }
+  *{box-sizing:border-box;}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+    background:var(--bg); color:var(--ink); margin:0; padding:0 0 64px;
+    line-height:1.6;
+  }
+  .wrap{max-width:980px; margin:0 auto; padding:0 28px;}
+  header.hero{
+    background:linear-gradient(180deg,#0c447c 0%,#083a68 100%);
+    color:#fff; padding:48px 28px 40px;
+  }
+  header.hero .wrap{max-width:980px;}
+  .eyebrow{font-size:13px; letter-spacing:.06em; text-transform:uppercase; color:#a9c9ea; margin:0 0 10px;}
+  h1{font-size:28px; font-weight:600; margin:0 0 12px; line-height:1.3;}
+  .hero p{color:#d9e6f5; font-size:15px; max-width:660px; margin:0;}
+  section{margin:44px 0;}
+  h2{font-size:20px; font-weight:600; margin:0 0 6px; color:var(--accent-d);}
+  h2 .num{color:var(--accent); font-weight:500; margin-right:8px;}
+  .lede{color:var(--sub); font-size:14.5px; margin:0 0 20px; max-width:720px;}
+  .card{
+    background:var(--card); border:1px solid var(--line); border-radius:12px;
+    padding:22px 24px; margin-bottom:18px;
+  }
+  table{width:100%; border-collapse:collapse; font-size:13.5px;}
+  th,td{text-align:left; padding:8px 10px; border-bottom:1px solid var(--line);}
+  th{color:var(--sub); font-weight:500; font-size:12.5px; text-transform:uppercase; letter-spacing:.02em;}
+  td.num, th.num{text-align:right; font-variant-numeric:tabular-nums;}
+  tr.total td{font-weight:600; border-top:1.5px solid var(--ink); border-bottom:none;}
+  .pill{
+    display:inline-block; padding:2px 10px; border-radius:99px; font-size:12px; font-weight:500;
+  }
+  .pill-blue{background:var(--accent-l); color:var(--accent-d);}
+  .pill-ok{background:var(--ok-l); color:#04342c;}
+  .pill-amber{background:var(--amber-l); color:#412402;}
+  .grid2{display:grid; grid-template-columns:1fr 1fr; gap:18px;}
+  .grid3{display:grid; grid-template-columns:repeat(3,1fr); gap:14px;}
+  @media(max-width:720px){.grid2{grid-template-columns:1fr;} .grid3{grid-template-columns:1fr;}}
+  .flow{display:flex; align-items:center; flex-wrap:wrap; gap:0; margin:18px 0;}
+  .flow-box{
+    background:var(--accent-l); border:1px solid #b5d4f4; border-radius:8px;
+    padding:10px 14px; font-size:13px; color:var(--accent-d); font-weight:500; text-align:center;
+    min-width:110px;
+  }
+  .flow-arrow{color:var(--sub); font-size:18px; margin:0 8px;}
+  .qbox{
+    background:var(--ok-l); border:1px solid #9fe1cb; border-radius:10px;
+    padding:16px 18px; margin-top:14px; font-size:14px;
+  }
+  .qbox b{color:#04342c;}
+  .qbox.amber{background:var(--amber-l); border-color:#f2cd8a;}
+  .qbox.amber b{color:#412402;}
+  ul.tight{margin:8px 0; padding-left:20px;}
+  ul.tight li{margin-bottom:4px; font-size:14px;}
+  .canvas-wrap{position:relative; height:280px; margin-top:14px;}
+  .canvas-wrap.small{height:220px;}
+  .formula{
+    font-family:"Courier New",monospace; background:#f4f2ea; border-radius:8px;
+    padding:14px 16px; font-size:13.5px; margin:10px 0; border-left:3px solid var(--accent);
+  }
+  .stat{
+    background:var(--card); border:1px solid var(--line); border-radius:10px;
+    padding:14px 16px; text-align:center;
+  }
+  .stat .v{font-size:22px; font-weight:700; color:var(--accent-d);}
+  .stat .l{font-size:12px; color:var(--sub); margin-top:2px;}
+  .foot{margin-top:60px; padding-top:20px; border-top:1px solid var(--line); font-size:12.5px; color:var(--sub);}
+
+  .angga-strip{
+    background:#f0f6fc; border:1px solid #c8ddef; border-left:4px solid var(--accent);
+    border-radius:10px; padding:16px 18px; margin:22px 0 8px;
+  }
+  .angga-strip .label{
+    font-size:11px; font-weight:700; letter-spacing:.06em; text-transform:uppercase;
+    color:var(--accent-d); margin-bottom:6px;
+  }
+  .angga-strip p{margin:0; font-size:13.5px; color:#33495f;}
+  .angga-tags{display:flex; flex-wrap:wrap; gap:7px; margin:0 0 18px;}
+  .angga-tag{
+    display:inline-block; padding:4px 9px; border-radius:999px; font-size:11.5px;
+    font-weight:600; color:var(--accent-d); background:var(--accent-l); border:1px solid #c8ddef;
+  }
+  .angga-tag.direct{background:var(--ok-l); color:#04342c; border-color:#9fe1cb;}
+  .angga-tag.mapping{background:var(--amber-l); color:#412402; border-color:#f2cd8a;}
+  .angga-note{
+    font-size:12.5px; color:var(--sub); margin:8px 0 18px; padding-left:12px;
+    border-left:2px solid var(--line);
+  }
+</style>
+</head>
+<body>
+<div style="max-width:960px;margin:0 auto;padding:14px 20px 0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:13px;"><a href="index.html" style="color:#0c447c;text-decoration:none;font-weight:600;">← Kembali ke Professional Portfolio</a></div>
+
+
+<header class="hero">
+  <div class="wrap">
+    <p class="eyebrow">Portfolio kerja — Budget & Cost Control</p>
+    <h1>Cost Accounting & Fleet Management di Tambang Nikel</h1>
+    <p>Contoh penerapan analisis biaya produksi, reconciliation cash flow, dan perhitungan fleet management pada operasi tambang nikel — menunjukkan bagaimana pendekatan ini dijalankan pada scope kerja Budget & Cost Control Supervisor.</p>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="angga-strip">
+    <div class="label">ANGGA PRABUDI — Experience-to-Portfolio Mapping</div>
+    <p><b>7+ years in Finance, Accounting & Tax</b>, including Budget & Cost Control Supervisor at PT Tribhakti Inspektama, Senior FAT Foreman in a coal-mining environment at PT Jaringan Energi Nusantara, and current Senior FAT Specialist at PT Aris Keep Going. This portfolio is intentionally tagged to show which analyses are <b>directly grounded in Angga's work experience</b> and which are <b>analytical mappings/work samples</b> for the target nickel-mining role.</p>
+  </div>
+
+  <!-- 1. COGM COGS FLOW -->
+  <section id="cogm">
+    <h2><span class="num">1</span>Penerapan Alur COGM → COGS</h2>
+    <div class="angga-tags">
+      <span class="angga-tag mapping">ANGGA | Cost roll-up & reconciliation logic</span>
+      <span class="angga-tag direct">ANGGA | Budget vs Actual / variance discipline</span>
+      <span class="angga-tag direct">ANGGA | Accounting-to-GL reconciliation</span>
+    </div>
+    <p class="angga-note"><b>How this connects to Angga:</b> formal RM → WIP → FG production costing was not his primary responsibility in prior roles. The portfolio therefore presents the underlying cost-accounting logic as an analytical work sample, grounded in his repeated experience with budget realization, committed-vs-realized costs, multi-source consolidation, and reconciliation to Accounting/GL — not as a claim that he previously owned a formal COGM/COGS production report.</p>
+    <p class="lede">Logika COGM/COGS pada operasi produksi diterapkan dengan menelusuri raw material, direct labor, dan overhead, disesuaikan dengan perubahan WIP dan Finished Goods sebelum menjadi HPP per periode.</p>
+
+    <div class="card">
+      <div class="flow">
+        <div class="flow-box">Direct Material<br><span style="font-weight:400">Rp 21.125.000</span></div>
+        <div class="flow-arrow">+</div>
+        <div class="flow-box">Direct Labor<br><span style="font-weight:400">Rp 38.875.000</span></div>
+        <div class="flow-arrow">+</div>
+        <div class="flow-box">BOP Applied<br><span style="font-weight:400">Rp 41.679.000</span></div>
+        <div class="flow-arrow">=</div>
+        <div class="flow-box" style="background:#faeeda;border-color:#fac775;color:#412402;">Manufacturing Cost<br><b>Rp 101.319.000</b></div>
+      </div>
+      <div class="flow">
+        <div class="flow-box">+ WIP Awal<br><span style="font-weight:400">Rp 25.700.000</span></div>
+        <div class="flow-arrow">–</div>
+        <div class="flow-box">WIP Akhir<br><span style="font-weight:400">Rp 12.379.000</span></div>
+        <div class="flow-arrow">=</div>
+        <div class="flow-box" style="background:#e1f5ee;border-color:#9fe1cb;color:#04342c;">COGM<br><b>Rp 114.640.000</b></div>
+      </div>
+      <div class="flow">
+        <div class="flow-box">+ FG Awal<br><span style="font-weight:400">Rp 30.000.000</span></div>
+        <div class="flow-arrow">–</div>
+        <div class="flow-box">FG Akhir<br><span style="font-weight:400">Rp 20.000.000</span></div>
+        <div class="flow-arrow">=</div>
+        <div class="flow-box" style="background:#faece7;border-color:#f0997b;color:#4a1b0c;">COGS (HPP)<br><b>Rp 124.640.000</b></div>
+      </div>
+    </div>
+
+    <div class="qbox">
+      <b>Cara membaca angka ini di konteks tambang:</b>
+      <ul class="tight">
+        <li>COGM = seluruh biaya produksi ore yang selesai dipindahkan ke stockpile bulan berjalan (disesuaikan perubahan tonase WIP di front tambang)</li>
+        <li>COGS = biaya dari ore yang benar-benar terjual/ter-shipping bulan berjalan (disesuaikan perubahan tonase stockpile ETO/EFO sebagai padanan Finished Goods)</li>
+        <li>Implikasinya: COGS tidak sama dengan kebutuhan cash bulan berjalan, karena sebagian produksi masih tertahan di stockpile</li>
+      </ul>
+    </div>
+
+    <div class="qbox amber">
+      <b>Catatan sumber — cara memetakan dokumen operasional ke logika RM/WIP/FG:</b>
+      <p style="margin:6px 0 8px;">Dokumen SOP & anggaran tambang yang jadi rujukan tidak memakai istilah akuntansi manufaktur (RM/WIP/FG) secara eksplisit — dokumen tersebut bicara dalam bahasa teknis tambang (stripping, ore getting, stockpiling, shipment). Bagian portfolio ini adalah hasil <i>pemetaan</i> saya dari struktur teknis tersebut ke logika COGM/COGS:</p>
+      <table style="margin-top:4px;">
+        <tr><th>Istilah akuntansi manufaktur</th><th>Padanan pada dokumen tambang</th></tr>
+        <tr><td>Raw Material (RM)</td><td>Ore ROM hasil ore getting/selective mining sebelum diproses lebih lanjut</td></tr>
+        <tr><td>Work in Process (WIP)</td><td>Tonase ore yang sudah ditambang tapi masih di front/stockpile ETO (belum lolos QC final untuk shipment)</td></tr>
+        <tr><td>Finished Goods (FG)</td><td>Tonase ore di stockpile EFO — sudah lolos QC, siap muat kapal (Exportable Final Ore)</td></tr>
+        <tr><td>COGM (bottom-up)</td><td>Rekapitulasi Biaya Produksi — sewa alat berat + BBM + overhead 10%, dari bagian "Rekapitulasi Biaya" pada dokumen sumber</td></tr>
+        <tr><td>COGS (bottom-up)</td><td>Rekapitulasi Biaya Operasional all-in — produksi + shipment + operasional rutin + upah + kemitraan QC</td></tr>
+      </table>
+    </div>
+  </section>
+
+  <!-- 2. MINING COST STRUCTURE -->
+  <section id="mining-cost">
+    <h2><span class="num">2</span>Analisis struktur biaya produksi ore nikel per ton</h2>
+    <div class="angga-tags">
+      <span class="angga-tag direct">ANGGA | Mining-sector exposure: PT JEN</span>
+      <span class="angga-tag direct">ANGGA | Fuel budget vs site actual</span>
+      <span class="angga-tag direct">ANGGA | Root-cause / variance analysis</span>
+      <span class="angga-tag mapping">ANGGA | Nickel cost-per-ton work sample</span>
+    </div>
+    <p class="angga-note"><b>Experience anchor:</b> at PT Jaringan Energi Nusantara, Angga worked in a coal-mining/trading environment and acted as solar/diesel purchasing proxy, monitoring site fuel realization against budget and coordinating deviations with Operations. The nickel unit-cost tables below are a target-role work sample that translates the same budget-control discipline into mining cost drivers such as stripping, ore getting, hauling, logistics, and royalty.</p>
+    <p class="lede">Versi "COGM" pada tambang di-breakdown per ton (unit cost) alih-alih per periode akuntansi. Dua model struktur biaya berikut menunjukkan cara membaca komposisi biaya dan menghitung porsi tiap komponen terhadap total cost:</p>
+
+    <div class="grid2">
+      <div class="card">
+        <span class="pill pill-blue">Model A — Rute Barging, Kadar 1,8% Ni</span>
+        <table style="margin-top:12px;">
+          <tr><th>Komponen</th><th class="num">USD/ton</th><th class="num">% dari total</th></tr>
+          <tr><td>Total Mining Cost</td><td class="num">7,92</td><td class="num">26,7%</td></tr>
+          <tr><td>Total Logistic Cost</td><td class="num">2,43</td><td class="num">8,2%</td></tr>
+          <tr><td>Total Operating Cost</td><td class="num">2,02</td><td class="num">6,8%</td></tr>
+          <tr><td>Royalti + Land + CSR + Fee</td><td class="num">17,33</td><td class="num">58,3%</td></tr>
+          <tr class="total"><td>Grand Total Cost / ton FOB</td><td class="num">29,71</td><td class="num">100%</td></tr>
+        </table>
+      </div>
+
+      <div class="card">
+        <span class="pill pill-amber">Model B — Rute Kontraktor Lokal, Kadar 1,8% Ni</span>
+        <table style="margin-top:12px;">
+          <tr><th>Komponen</th><th class="num">USD/MT</th><th class="num">% dari total</th></tr>
+          <tr><td>Mining + Barging</td><td class="num">5,9</td><td class="num">35,5%</td></tr>
+          <tr><td>Legalitas + Royalti + Tax</td><td class="num">10,7</td><td class="num">64,5%</td></tr>
+          <tr class="total"><td>Total Cost / MT</td><td class="num">16,6</td><td class="num">100%</td></tr>
+          <tr><td>Margin kontraktor</td><td class="num">3,4</td><td class="num">16,2% dari harga jual</td></tr>
+          <tr class="total"><td>Harga jual FOB</td><td class="num">21,0</td><td class="num">—</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <span class="pill pill-ok">Model C — Rincian per komponen mining, kadar 1,8% Ni, harga CIF $30/ton (dari file cash flow kerja)</span>
+      <p style="font-size:13px;color:var(--sub);margin:8px 0 4px;">Breakdown paling granular — tiap komponen mining di-derive dari faktor operasional (rasio SR, jarak angkut, tarif per unit), bukan angka jadi. Berguna untuk audit trail: tiap baris bisa ditelusuri balik ke asumsi teknisnya.</p>
+      <table style="margin-top:8px;">
+        <tr><th>Komponen</th><th class="num">USD/ton</th><th class="num">Keterangan</th></tr>
+        <tr><td>Harga Jual FOB Tongkang</td><td class="num">30,00</td><td>CIF basis</td></tr>
+        <tr><td>Royalti (10%)</td><td class="num">3,00</td><td>% dari harga jual</td></tr>
+        <tr class="total"><td>Penjualan Bersih</td><td class="num">27,00</td><td>—</td></tr>
+        <tr><td>Over Burden (SR 2:1)</td><td class="num">4,29</td><td>termasuk PPN</td></tr>
+        <tr><td>ODHD OB</td><td class="num">0,00</td><td>—</td></tr>
+        <tr><td>Ore Getting</td><td class="num">1,10</td><td>—</td></tr>
+        <tr><td>Ore Hauling</td><td class="num">2,25</td><td>18 km, tarif Rp1.650/ton/km</td></tr>
+        <tr><td>Road Maintenance</td><td class="num">0,68</td><td>—</td></tr>
+        <tr><td>Jetty + Fee Lahan + RR/K3/Comdev + Infra</td><td class="num">1,10</td><td>gabungan</td></tr>
+        <tr class="total"><td>Total Biaya Mining</td><td class="num">10,48</td><td>38,8% dari penjualan bersih</td></tr>
+        <tr><td>Barging (Jetty to ISP/CIF)</td><td class="num">11,00</td><td>Total Biaya Transhipment</td></tr>
+        <tr class="total"><td>Laba Operasional</td><td class="num">5,52</td><td>—</td></tr>
+        <tr><td>Overhead Admin</td><td class="num">1,00</td><td>—</td></tr>
+        <tr class="total"><td>Laba Sebelum Pajak Badan</td><td class="num">4,52</td><td>15,1% dari harga jual FOB</td></tr>
+      </table>
+    </div>
+
+    <div class="canvas-wrap"><canvas id="costChart"></canvas></div>
+
+    <div class="qbox">
+      <b>Cross-check / reconciliation biaya (contoh variance analysis):</b>
+      <ul class="tight">
+        <li>Estimasi bottom-up dari rekap biaya teknis land clearing–stripping–produksi (sewa alat + BBM + overhead 10%) menghasilkan <b>$7,97/MT</b> — dibandingkan Total Mining Cost pada Model A sebesar <b>$7,92/MT</b> dan Model C sebesar <b>$10,48/MT</b>. Selisih Model A vs bottom-up hanya <b>+0,6%</b> (SR/jarak angkut mirip); selisih ke Model C lebih besar karena SR dan jarak hauling di kasus itu lebih tinggi — contoh cara memvalidasi angka budget dari sisi engineering vs sisi commercial sebelum disetujui, sekaligus mengecek sensitivitas cost terhadap asumsi SR/jarak.</li>
+        <li>Dari rekap biaya teknis yang sama, BBM alat berat (Rp 1.384.600.000) adalah <b>33,2%</b> dari total biaya teknis produksi (Rp 4.174.528.571) — komponen terbesar yang bisa dikontrol, jadi prioritas utama saat melakukan variance/root-cause review.</li>
+        <li>Biaya teknis shipment (loading + transhipment + barging, termasuk overhead 10%) menghasilkan <b>$8,06/MT</b> untuk basis 55.000 MT — dibandingkan komponen Barging Model C sebesar <b>$11,00/MT</b>, dipakai untuk mengecek kewajaran quote logistic pihak ketiga.</li>
+        <li>Total biaya operasional all-in (produksi + shipment + operasional rutin + upah + kemitraan QC) setara <b>$18,49/MT</b> — angka inilah yang jadi acuan cost baseline saat menyusun budget bulanan dan memantau realisasi vs anggaran.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 3. SUPPORTING DOCUMENTS: PRODUCTION PLAN & COST RECAP -->
+  <section id="supporting-docs">
+    <h2><span class="num">3</span>Dokumen pendukung: rencana produksi & rekapitulasi biaya</h2>
+    <div class="angga-tags">
+      <span class="angga-tag direct">ANGGA | CAPEX/OPEX purchase review</span>
+      <span class="angga-tag direct">ANGGA | Budget baseline & cost monitoring</span>
+      <span class="angga-tag direct">ANGGA | Operational cost-driver review</span>
+      <span class="angga-tag mapping">ANGGA | Mining production-cost work sample</span>
+    </div>
+    <p class="angga-note"><b>How this connects to the CV:</b> Angga's Budget & Cost Control Supervisor role included reviewing CAPEX/OPEX purchase requisitions against approved budgets, preparing consolidated Budget vs Actual reporting for the company and seven branches, and escalating significant variances with corrective recommendations. The production, fleet, fuel, shipment, and QC tables here show how that same control framework can be applied to a mining operating budget.</p>
+    <p class="lede">Bagian ini menampilkan tabel-tabel sumber dari dokumen SOP & anggaran tambang yang jadi dasar perhitungan pada bagian 1–2 — mulai dari asumsi produksi, kebutuhan alat berat, sampai rekapitulasi biaya per kategori. Ditampilkan apa adanya untuk menunjukkan cara membaca & menelusuri angka dari sumber ke kesimpulan.</p>
+
+    <div class="card">
+      <span class="pill pill-blue">Asumsi produksi & cadangan</span>
+      <table style="margin-top:12px;">
+        <tr><th>Parameter</th><th class="num">Nilai</th></tr>
+        <tr><td>Target produksi</td><td class="num">60.000 MT/bulan</td></tr>
+        <tr><td>Target shipment</td><td class="num">55.000 MT/bulan</td></tr>
+        <tr><td>Densitas Ni</td><td class="num">1,6 T/m³</td></tr>
+        <tr><td>Luasan area ditambang</td><td class="num">30 Ha (30% area potensial ore)</td></tr>
+        <tr><td>Ketebalan limonite / saprolite</td><td class="num">6 m / 6 m</td></tr>
+        <tr><td>Rasio target produksi : cadangan</td><td class="num">1 : 13,6</td></tr>
+        <tr><td>Waktu kerja efektif</td><td class="num">15 jam/hari (2 shift, 6 hari kerja)</td></tr>
+        <tr><td>Loading rate ke vessel</td><td class="num">6.000 MT/hari</td></tr>
+      </table>
+    </div>
+
+    <div class="card">
+      <span class="pill pill-amber">Kebutuhan alat berat (ringkasan per tahap kerja)</span>
+      <table style="margin-top:12px;">
+        <tr><th>Tahap</th><th class="num">Excavator PC200</th><th class="num">Bulldozer 68E-SS</th><th class="num">Dump Truck</th></tr>
+        <tr><td>Land clearing, stripping OB & limonite</td><td class="num">3</td><td class="num">1</td><td class="num">4</td></tr>
+        <tr><td>Stripping & limonite stocking</td><td class="num">3</td><td class="num">1</td><td class="num">11</td></tr>
+        <tr><td>Ore getting — selective mining</td><td class="num">6</td><td class="num">—</td><td class="num">16</td></tr>
+        <tr><td>Stockpile ETO & EFO</td><td class="num">5</td><td class="num">2</td><td class="num">—</td></tr>
+        <tr><td>Loading point (ETO+EFO, shipment)</td><td class="num">4</td><td class="num">4</td><td class="num">22</td></tr>
+        <tr><td>Perawatan jalan tambang & stockpile</td><td class="num">—</td><td class="num">—</td><td class="num">1 Grader + 1 Motor Compactor</td></tr>
+      </table>
+      <p style="font-size:13px; color:var(--sub); margin-top:10px;">Ini basis kerja yang sama yang dipakai untuk hitungan match factor & kebutuhan unit di bagian 4 — jumlah unit dihitung dari produktivitas alat per jam dibagi target tonase per tahap, dengan buffer efisiensi 70–80%.</p>
+    </div>
+
+    <div class="grid2">
+      <div class="card">
+        <span class="pill pill-ok">Rekapitulasi Biaya Produksi</span>
+        <table style="margin-top:12px;">
+          <tr><th>Komponen</th><th class="num">Total (Rp)</th></tr>
+          <tr><td>Sewa alat berat (land clearing–produksi)</td><td class="num">2.789.928.571</td></tr>
+          <tr><td>BBM alat berat</td><td class="num">1.384.600.000</td></tr>
+          <tr class="total"><td>Biaya Teknis Produksi</td><td class="num">4.174.528.571</td></tr>
+          <tr><td>Overhead 10%</td><td class="num">417.452.857</td></tr>
+          <tr class="total"><td>Total Biaya Produksi / 60.000 MT</td><td class="num">4.591.981.429</td></tr>
+          <tr class="total"><td>= USD / MT</td><td class="num">7,97</td></tr>
+        </table>
+      </div>
+      <div class="card">
+        <span class="pill pill-ok">Rekapitulasi Biaya Shipment</span>
+        <table style="margin-top:12px;">
+          <tr><th>Komponen</th><th class="num">Total (Rp)</th></tr>
+          <tr><td>Sewa alat loading point (ETO+EFO)</td><td class="num">886.416.667</td></tr>
+          <tr><td>Barging & shipping (barge, tugboat, PBM/TKBM)</td><td class="num">2.150.000.000</td></tr>
+          <tr><td>BBM loading point & transhipment</td><td class="num">632.000.000</td></tr>
+          <tr class="total"><td>Biaya Teknis Shipment</td><td class="num">3.866.416.667</td></tr>
+          <tr><td>Overhead 10%</td><td class="num">386.641.667</td></tr>
+          <tr class="total"><td>Total Biaya Shipment / 55.000 MT</td><td class="num">4.253.058.333</td></tr>
+          <tr class="total"><td>= USD / MT</td><td class="num">8,06</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <span class="pill pill-amber">Rekapitulasi Biaya Operasional (all-in)</span>
+      <table style="margin-top:12px;">
+        <tr><th>Komponen</th><th class="num">Rp</th></tr>
+        <tr><td>Land Clearing, Stripping & Produksi</td><td class="num">4.591.981.429</td></tr>
+        <tr><td>Shipment</td><td class="num">4.253.058.333</td></tr>
+        <tr><td>Anggaran Operasional Kerja Rutin</td><td class="num">132.500.000</td></tr>
+        <tr><td>Upah — Salary — Insentive ($1,5/MT)</td><td class="num">792.000.000</td></tr>
+        <tr><td>Kemitraan sub kontrak Quality Control ($0,8/MT)</td><td class="num">883.200.000</td></tr>
+        <tr class="total"><td>Total Biaya Operasional (Biaya Teknis)</td><td class="num">10.652.739.762</td></tr>
+        <tr class="total"><td>= USD / MT (kurs 9.600)</td><td class="num">18,49</td></tr>
+      </table>
+      <p style="font-size:13px; color:var(--sub); margin-top:10px;">Belum termasuk komponen non-teknis (royalti pemda, CSR, royalti pemilik konsesi, export tax, quota cost, fee institusional) yang pada dokumen sumber masih kosong/belum diisi — jadi angka $18,49/MT ini adalah <i>technical cost floor</i>, bukan cost final ke investor.</p>
+    </div>
+
+    <div class="card">
+      <span class="pill pill-blue">Anggaran pembentukan unit preparasi sample (QC)</span>
+      <table style="margin-top:12px;">
+        <tr><th>Kategori</th><th class="num">Total (Rp)</th><th>Item kunci</th></tr>
+        <tr><td>Alat preparasi & analisa (crusher, oven, Niton analyzer, dll)</td><td class="num">~1.070.000.000</td><td>termasuk Niton Analyzer Rp450 jt</td></tr>
+        <tr><td>Genset 2 unit (2 shift)</td><td class="num">500.000.000</td><td>—</td></tr>
+        <tr><td>Bangunan preparasi & sample house</td><td class="num">70.000.000</td><td>—</td></tr>
+        <tr><td>Peralatan lapangan & consumables lain</td><td class="num">~57.000.000</td><td>scoop, ayakan, laptop, dll</td></tr>
+        <tr class="total"><td>Total Anggaran QC</td><td class="num">1.697.080.000</td><td>—</td></tr>
+      </table>
+      <p style="font-size:13px; color:var(--sub); margin-top:10px;">Ini basis komersial dari kemitraan sub-kontrak QC senilai $0,8/MT pada tabel Biaya Operasional di atas — cara mengecek apakah tarif per-MT yang ditawarkan vendor QC masuk akal dibanding capex+opex mereka.</p>
+    </div>
+  </section>
+
+  <!-- 4. CASH FLOW & MARGIN ANALYSIS -->
+  <section id="cashflow">
+    <h2><span class="num">4</span>Reconciliation cash flow & analisis margin per bulan</h2>
+    <div class="angga-tags">
+      <span class="angga-tag direct">ANGGA | Multi-bank cash-flow consolidation</span>
+      <span class="angga-tag direct">ANGGA | Two-entity FAT reporting</span>
+      <span class="angga-tag direct">ANGGA | Project / cost-center cash monitoring</span>
+      <span class="angga-tag direct">ANGGA | Power Query + Power Pivot</span>
+    </div>
+    <p class="angga-note"><b>Direct experience:</b> at PT Jaringan Energi Nusantara, Angga built a consolidated multi-bank cash-flow report covering PT JEN and PT Jaringan Niaga Nusantara, providing real-time management visibility. At PT Tribhakti Inspektama, he tracked cash inflow/outflow at Sales Order/project and cost-center level and reconciled realization figures with Accounting before reporting.</p>
+    <p class="lede">Contoh membaca cash flow tiga bulan produksi: revenue diakui saat shipment/pengapalan, cash out mencakup sewa alat, BBM, hauling, royalti lahan, dan biaya pengangkutan ke pabrik, lalu direkonsiliasi dengan PPN dan pembayaran IUP untuk mendapat pendapatan bersih.</p>
+
+    <div class="card">
+      <span class="pill pill-blue">Cash flow proyek nikel — data riil (sheet "cashflow")</span>
+      <p style="font-size:13px; color:var(--sub); margin:8px 0 4px;">Asumsi: kurs Rp14.500/USD, harga jual 18 USD/ton, cost produksi 5,72 USD/ton, royalti 6 USD/ton, M0 = bulan pra-produksi.</p>
+      <table style="margin-top:8px;">
+        <tr><th>Item</th><th class="num">M0 (Pre-mining)</th><th class="num">M1</th><th class="num">M2</th><th class="num">M3</th></tr>
+        <tr><td>Revenue (Ore 1,8%, 30.000 MT)</td><td class="num">–</td><td class="num">7.830.000.000</td><td class="num">7.830.000.000</td><td class="num">7.830.000.000</td></tr>
+        <tr><td>Cost of Production</td><td class="num">–</td><td class="num">(2.548.000.000)</td><td class="num">(2.548.000.000)</td><td class="num">(3.085.900.000)</td></tr>
+        <tr><td>Royalty (6 USD/MT)</td><td class="num">–</td><td class="num">(2.610.000.000)</td><td class="num">(2.610.000.000)</td><td class="num">(2.610.000.000)</td></tr>
+        <tr><td>Owner Expenses (DP, permit, jetty, land rent)</td><td class="num">(5.000.000.000)</td><td class="num">2.500.000.000</td><td class="num">2.500.000.000</td><td class="num">–</td></tr>
+        <tr class="total"><td>Operating Income / Net Income</td><td class="num">(7.548.000.000)</td><td class="num">5.172.000.000</td><td class="num">5.172.000.000</td><td class="num">2.134.100.000</td></tr>
+        <tr><td>Early Funding Requirement (Financing In)</td><td class="num">8.500.000.000</td><td class="num">–</td><td class="num">–</td><td class="num">–</td></tr>
+        <tr class="total"><td>Ending Cash</td><td class="num">952.000.000</td><td class="num">6.124.000.000</td><td class="num">11.296.000.000</td><td class="num">13.430.100.000</td></tr>
+      </table>
+      <p style="font-size:12.5px; color:var(--sub); margin-top:8px;">Sumber: 2020 Cashflow Nikel.xlsx, sheet "cashflow". Workbook yang sama juga berisi sheet proyeksi ramp-up produksi bulanan (M1→M12, dari 15.000 MT naik bertahap ke steady-state 50.000 MT/bulan) dan sheet breakdown per-ton mining cost yang jadi sumber Model C di bagian 2 — menunjukkan bagaimana satu file cash flow dipakai lintas keperluan: financing (early funding requirement, time-to-return-investment), operasional (cost of production), dan pricing (sensitivitas harga & SR terhadap laba per ton).</p>
+    </div>
+
+    <div class="card">
+      <span class="pill pill-amber">Format ringkasan (rounded) — Grand Total Cash In/Out per bulan</span>
+      <table style="margin-top:8px;">
+        <tr><th>Item</th><th class="num">Bulan I</th><th class="num">Bulan II</th><th class="num">Bulan III</th></tr>
+        <tr><td>Grand Total Cash In</td><td class="num">17.040.000.000</td><td class="num">17.040.000.000</td><td class="num">17.040.000.000</td></tr>
+        <tr><td>Grand Total Cash Out</td><td class="num">7.841.000.000</td><td class="num">7.441.000.000</td><td class="num">7.441.000.000</td></tr>
+        <tr><td>PPN 10%</td><td class="num">1.704.000.000</td><td class="num">1.704.000.000</td><td class="num">1.704.000.000</td></tr>
+        <tr><td>Pendapatan (sebelum IUP)</td><td class="num">7.495.000.000</td><td class="num">7.895.000.000</td><td class="num">7.895.000.000</td></tr>
+        <tr><td>Pembayaran IUP 30%</td><td class="num">2.248.500.000</td><td class="num">2.368.500.000</td><td class="num">2.368.500.000</td></tr>
+        <tr class="total"><td>Pendapatan Bersih</td><td class="num">5.246.500.000</td><td class="num">5.526.500.000</td><td class="num">5.526.500.000</td></tr>
+        <tr class="total"><td>Net Margin thd Cash In</td><td class="num">30,8%</td><td class="num">32,4%</td><td class="num">32,4%</td></tr>
+      </table>
+    </div>
+
+    <div class="canvas-wrap small"><canvas id="marginChart"></canvas></div>
+
+    <div class="qbox">
+      <b>Insight variance (contoh root-cause analysis):</b> Cash out Bulan I lebih tinggi Rp 400 juta dibanding Bulan II–III karena ada komponen one-off di bulan pertama — rental alat berat 10 unit (Rp 850 juta), rental dump truck 20 unit (Rp 200 juta), dan MOB alat berat (Rp 175 juta) — yang tidak berulang di bulan berikutnya. Selisih ini murni <i>timing setup cost</i>, bukan pemborosan operasional, dan net margin naik dari 30,8% ke 32,4% begitu biaya setup selesai diamortisasi.
+    </div>
+  </section>
+
+  <!-- 5. FLEET MANAGEMENT -->
+  <section id="fleet">
+    <h2><span class="num">5</span>Perhitungan kebutuhan fleet & match factor</h2>
+    <div class="angga-tags">
+      <span class="angga-tag direct">ANGGA | Heavy-equipment cost / rental exposure</span>
+      <span class="angga-tag direct">ANGGA | Budget control over variable operating costs</span>
+      <span class="angga-tag mapping">ANGGA | Match-factor analytical work sample</span>
+    </div>
+    <p class="angga-note"><b>Role relevance:</b> Angga's cost-control background includes budget monitoring for cost-heavy operations and the portfolio explicitly links fleet utilisation, rental cost, fuel consumption, productivity, and match factor. The technical fleet calculation is presented as a work sample demonstrating how he approaches the cost driver, rather than as a claim of having previously been the mine planner or fleet engineer.</p>
+    <p class="lede">Kompetensi fleet management dijalankan dengan menghitung produktivitas alat dan match factor untuk menentukan jumlah unit alat gali-muat-angkut yang sesuai target produksi — dipakai untuk mengecek kewajaran budget sewa alat.</p>
+    <div class="card">
+      <div class="formula">Q (produktivitas, m³/jam) = kb × Ff × Eff × ρ × (60 / Ct)</div>
+      <ul class="tight">
+        <li><b>kb</b> = kapasitas bucket, <b>Ff</b> = fill factor, <b>Eff</b> = efisiensi kerja, <b>Ct</b> = cycle time (menit)</li>
+        <li><b>Match factor</b> = rasio kapasitas alat angkut terhadap alat gali-muat — idealnya mendekati 1 (tidak ada alat menganggur)</li>
+      </ul>
+      <table style="margin-top:14px;">
+        <tr><th>Aktivitas</th><th class="num">Target produksi</th><th class="num">Kapasitas efektif/unit</th><th class="num">Kebutuhan unit</th></tr>
+        <tr><td>Excavator PC200 — Ore Getting</td><td class="num">400 MT/jam</td><td class="num">74,9 MT/jam</td><td class="num">5,3 → 6 unit</td></tr>
+        <tr><td>Dump Truck — Ore ke EFO (70%)</td><td class="num">42.000 MT / 150 jam</td><td class="num">24 MT/jam</td><td class="num">11,7 → 12 unit</td></tr>
+        <tr><td>Dump Truck — Ore ke ETO (30%)</td><td class="num">18.000 MT / 150 jam</td><td class="num">36 MT/jam</td><td class="num">3,3 → 4 unit</td></tr>
+      </table>
+      <p style="font-size:13.5px; margin-top:10px;">Match factor Excavator : Dump Truck pada skenario ini ≈ 6 : 16 (± 1 : 2,7) — dipakai untuk mengecek apakah kombinasi jumlah unit di budget sewa alat sudah proporsional terhadap target produksi, atau berpotensi ada alat yang idle/kurang.</p>
+    </div>
+  </section>
+
+  <div class="foot">
+    <b>Experience basis:</b> Angga Prabudi's CV/cover letter — Budget & Cost Control Supervisor at PT Tribhakti Inspektama; Senior FAT Foreman at PT Jaringan Energi Nusantara (mining & trading coal); Senior FAT Specialist at PT Aris Keep Going. <b>Work-sample basis:</b> the nickel SOP/budget and cash-flow reference materials used for sections 1–5. Tags distinguish direct experience from analytical mapping so the portfolio does not overstate prior formal COGM/COGS ownership.
+  </div>
+
+</div>
+
+<script>
+const ctx = document.getElementById('costChart');
+new Chart(ctx, {
+  type: 'bar',
+  data: {
+    labels: ['Mining/Getting', 'Logistic/Barging', 'Operating', 'Royalti/Legalitas'],
+    datasets: [
+      {
+        label: 'Model A (USD/ton)',
+        data: [7.92, 2.43, 2.02, 17.33],
+        backgroundColor: '#378ADD'
+      },
+      {
+        label: 'Model B (USD/MT, mining+barging vs legalitas)',
+        data: [5.9, 0, 0, 10.7],
+        backgroundColor: '#EF9F27'
+      },
+      {
+        label: 'Model C (USD/ton, detail komponen)',
+        data: [10.48, 11.0, 1.0, 3.0],
+        backgroundColor: '#0f6e56'
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: { legend: { position: 'bottom', labels: { font: { size: 12 } } } },
+    scales: {
+      y: { beginAtZero: true, title: { display: true, text: 'USD / ton' } }
+    }
+  }
+});
+
+const ctx2 = document.getElementById('marginChart');
+new Chart(ctx2, {
+  type: 'line',
+  data: {
+    labels: ['Bulan I', 'Bulan II', 'Bulan III'],
+    datasets: [{
+      label: 'Net Margin (%)',
+      data: [30.8, 32.4, 32.4],
+      borderColor: '#0f6e56',
+      backgroundColor: '#e1f5ee',
+      fill: true,
+      tension: 0.25,
+      pointRadius: 5
+    }]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: { legend: { display: false } },
+    scales: {
+      y: { title: { display: true, text: 'Net Margin thd Cash In (%)' }, suggestedMin: 25, suggestedMax: 35 }
+    }
+  }
+});
+</script>
+
+</body>
+</html>

@@ -978,3 +978,74 @@ new Chart(document.getElementById('chartOpex'), {
 
 
 <div style="height: 55px !important;"></div><div style="height: 55px !important;"></div><div style="height: 55px !important;"></div></body></html>
+<!-- ========================================== -->
+<!-- KODE SCRIPT CHART DINAMIS — ANGGA PRABUDI  -->
+<!-- ========================================== -->
+<script>
+  // KELOMPOK DATA UTAMA (JAKARTA BRANCH JAN-JUN 2023)
+  const months = ['Jan-23', 'Feb-23', 'Mar-23', 'Apr-23', 'May-23', 'Jun-23'];
+
+  // 1. Chart: Monthly Revenue — Actual vs Budget
+  const ctxRevenue = document.getElementById('revenueChart') || document.createElement('canvas');
+  if(document.getElementById('revenueChart')) {
+    new Chart(ctxRevenue, {
+      type: 'bar',
+      data: {
+        labels: months,
+        datasets: [
+          { label: 'Actual Revenue', data:, backgroundColor: '#1F6FEB' },
+          { label: 'Budget Revenue', data:, backgroundColor: 'rgba(0,0,0,0.15)' }
+        ]
+      },
+      options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true } } }
+    });
+  }
+
+  // 2. Chart: Gross Profit & EBITDA Monthly
+  const ctxProfit = document.getElementById('profitChart') || document.createElement('canvas');
+  if(document.getElementById('profitChart')) {
+    new Chart(ctxProfit, {
+      type: 'line',
+      data: {
+        labels: months,
+        datasets: [
+          { label: 'Gross Profit', data:, borderColor: '#0F6E56', tension: 0.2, fill: false },
+          { label: 'EBITDA', data:, borderColor: '#BA7517', tension: 0.2, fill: false }
+        ]
+      },
+      options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true } } }
+    });
+  }
+
+  // 3. Chart: P&L Summary — Budget vs Actual
+  const ctxPL = document.getElementById('plChart') || document.createElement('canvas');
+  if(document.getElementById('plChart')) {
+    new Chart(ctxPL, {
+      type: 'bar',
+      data: {
+        labels: ['Total Revenue', 'Gross Profit', 'EBITDA'],
+        datasets: [
+          { label: 'Actual H1', data:, backgroundColor: '#0F6E56' },
+          { label: 'Budget H1', data:, backgroundColor: '#0D1B2A' }
+        ]
+      },
+      options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true } } }
+    });
+  }
+
+  // 4. Chart: Monthly OPEX vs Gross Profit
+  const ctxOpex = document.getElementById('opexChart') || document.createElement('canvas');
+  if(document.getElementById('opexChart')) {
+    new Chart(ctxOpex, {
+      type: 'bar',
+      data: {
+        labels: months,
+        datasets: [
+          { label: 'Monthly OPEX', data:, backgroundColor: '#C0392B', stack: 'Stack 0' },
+          { label: 'Gross Profit', data:, backgroundColor: '#0F6E56', stack: 'Stack 1' }
+        ]
+      },
+      options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true } } }
+    });
+  }
+</script>
